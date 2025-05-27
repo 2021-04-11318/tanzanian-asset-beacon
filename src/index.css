@@ -1,11 +1,12 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 240 10% 97%; /* Slightly off-white for neo-bg like #F5F5F5 */
+    --foreground: 240 10% 3.9%; /* Dark grey for neo-text like #1A1A1A */
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -22,33 +23,20 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    /* Use neo-accent for accent if desired, or keep shadcn's default */
+    --accent: 180 100% 50%; /* Electric Blue for neo-accent like #00FFFF */
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 10% 3.9%; /* Dark grey for neo-border like #1A1A1A */
+    --input: 214.3 31.8% 91.4%; /* Default input, can be overridden */
+    --ring: 180 100% 50%; /* Electric blue for ring */
 
-    --radius: 0.5rem;
+    --radius: 0rem; /* Sharp corners by default */
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* ... keep existing code (sidebar variables) ... */
   }
 
   .dark {
@@ -79,14 +67,7 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* ... keep existing code (dark sidebar variables) ... */
   }
 }
 
@@ -96,6 +77,34 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-neo-bg text-neo-text font-sans; /* Using neo-bg and neo-text, consider a specific neo-brutalist font later */
+  }
+
+  /* Specific styles for neo-brutalism */
+  .neo-card {
+    @apply bg-white border-2 border-neo-border p-4 shadow-neo-hard rounded-none;
+  }
+
+  .neo-input {
+    @apply bg-white border-2 border-neo-border p-2 rounded-none focus:ring-2 focus:ring-neo-accent focus:border-neo-accent outline-none placeholder-gray-400;
+  }
+  
+  .neo-select {
+    @apply bg-white border-2 border-neo-border p-2 rounded-none appearance-none focus:ring-2 focus:ring-neo-accent focus:border-neo-accent outline-none;
+    /* Basic arrow, can be customized further with SVG */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%231A1A1A'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem; /* Make space for the arrow */
+  }
+
+  .neo-button {
+    @apply bg-neo-accent text-neo-border font-bold py-2 px-4 border-2 border-neo-border rounded-none shadow-neo-hard hover:bg-neo-accent-darker hover:shadow-none transform active:translate-y-px active:translate-x-px active:shadow-none transition-all duration-100;
+  }
+
+  .neo-button-secondary {
+    @apply bg-white text-neo-border font-bold py-2 px-4 border-2 border-neo-border rounded-none shadow-neo-hard hover:bg-gray-100 hover:shadow-none transform active:translate-y-px active:translate-x-px active:shadow-none transition-all duration-100;
   }
 }
+

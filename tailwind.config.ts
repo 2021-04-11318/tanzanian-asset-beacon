@@ -61,13 +61,24 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+        // Neo-brutalist theme colors
+        'neo-bg': '#F5F5F5', // Off-white background
+        'neo-text': '#1A1A1A', // Dark text
+        'neo-border': '#1A1A1A', // Dark border
+        'neo-accent': '#00FFFF', // Electric blue accent
+        'neo-accent-darker': '#00E0E0', // A slightly darker accent for hover states
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+        none: '0', // For sharp edges
 			},
+      boxShadow: {
+        'neo-hard': '4px 4px 0px 0px #1A1A1A', // Hard offset shadow
+        'neo-hard-accent': '4px 4px 0px 0px #00FFFF',
+      },
 			keyframes: {
 				'accordion-down': {
 					from: {
