@@ -11,3 +11,11 @@ export interface Asset {
   purchaseDate?: string; // Optional for now
 }
 
+export type SortKey = 'name' | 'totalValue' | 'returnPercentage' | 'purchaseDate';
+export type SortDirection = 'asc' | 'desc';
+
+export interface SortConfig {
+  key: SortKey;
+  direction: SortDirection;
+}
+
