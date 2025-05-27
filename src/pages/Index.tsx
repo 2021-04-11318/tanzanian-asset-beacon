@@ -2,23 +2,30 @@
 import React, { useState } from 'react';
 import AssetForm from '@/components/AssetForm';
 import AssetList from '@/components/AssetList';
+import AssetDetailModal from '@/components/AssetDetailModal';
+import PortfolioSummary from '@/components/PortfolioSummary';
 import { Asset } from '@/types';
-import { Wallet, TrendingUp } from 'lucide-react'; // Example icons
+import { Wallet, TrendingUp } from 'lucide-react';
 
 const Index = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null); // For future detail view
+  const [selectedAssetForDetail, setSelectedAssetForDetail] = useState<Asset | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
   const handleAddAsset = (asset: Asset) => {
-    setAssets((prevAssets) => [...prevAssets, asset]);
+    setAssets((prevAssets) => [...prevAssets, { ...asset, id: asset.id || crypto.randomUUID() }]);
+     // console.log("Asset added:", asset);
   };
 
   const handleViewDetails = (assetId: string) => {
-    setSelectedAssetId(assetId);
-    // For now, just log. Detail view modal/page will be implemented later.
-    console.log("View details for asset ID:", assetId);
-    alert(`Placeholder: View details for asset ID: ${assetId}. This will be implemented next!`);
+    const assetToShow = assets.find(asset => asset.id === assetId);
+    if (assetToShow) {
+      setSelectedAssetForDetail(assetToShow);
+      setIsDetailModalOpen(true);
+      // console.log("Viewing details for asset:", assetToShow);
+    } else {
+      // console.error("Asset not found for ID:", assetId);
+    }
   };
 
   return (
@@ -33,9 +40,16 @@ const Index = () => {
       </header>
 
       <main className="max-w-4xl mx-auto">
+        <PortfolioSummary assets={assets} />
         <AssetForm onAddAsset={handleAddAsset} />
         <AssetList assets={assets} onViewDetails={handleViewDetails} />
       </main>
+
+      <AssetDetailModal
+        asset={selectedAssetForDetail}
+        isOpen={isDetailModalOpen}
+        onOpenChange={setIsDetailModalOpen}
+      />
 
       <footer className="text-center mt-12 py-6 border-t-2 border-neo-border">
         <p className="text-sm text-gray-600">&copy; {new Date().getFullYear()} TZ Portfolio Tracker. Brutally Yours.</p>
@@ -45,4 +59,3 @@ const Index = () => {
 };
 
 export default Index;
-
