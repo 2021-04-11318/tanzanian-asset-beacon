@@ -1,10 +1,12 @@
+
 import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import AssetForm from '@/components/AssetForm';
 import AssetList from '@/components/AssetList';
 import AssetDetailModal from '@/components/AssetDetailModal';
 import PortfolioSummary from '@/components/PortfolioSummary';
 import { Asset, AssetType, SortConfig, SortKey } from '@/types';
-import { Wallet, TrendingUp } from 'lucide-react';
+import { Wallet, TrendingUp, ArrowLeft } from 'lucide-react';
 
 const Index = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -86,6 +88,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-neo-bg text-neo-text p-4 md:p-8 selection:bg-neo-accent selection:text-neo-bg">
+      <div className="mb-4">
+        <Link to="/" className="inline-flex items-center text-neo-accent hover:underline">
+          <ArrowLeft size={20} className="mr-2" />
+          Back to Home
+        </Link>
+      </div>
+      
       <header className="mb-12 text-center">
         <div className="inline-block border-2 border-neo-border p-4 shadow-neo-hard bg-white">
             <h1 className="text-4xl md:text-5xl font-extrabold text-neo-text flex items-center justify-center">
