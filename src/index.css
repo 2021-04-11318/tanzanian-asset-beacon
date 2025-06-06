@@ -5,69 +5,66 @@
 
 @layer base {
   :root {
-    --background: 240 10% 97%; /* Slightly off-white for neo-bg like #F5F5F5 */
-    --foreground: 240 10% 3.9%; /* Dark grey for neo-text like #1A1A1A */
-
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
-    /* Use neo-accent for accent if desired, or keep shadcn's default */
-    --accent: 180 100% 50%; /* Electric Blue for neo-accent like #00FFFF */
+    --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 240 10% 3.9%; /* Dark grey for neo-border like #1A1A1A */
-    --input: 214.3 31.8% 91.4%; /* Default input, can be overridden */
-    --ring: 180 100% 50%; /* Electric blue for ring */
-
-    --radius: 0rem; /* Sharp corners by default */
-
-    /* ... keep existing code (sidebar variables) ... */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 10.6% 64.9%;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    /* ... keep existing code (dark sidebar variables) ... */
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 94.1%;
+    --sidebar-primary-foreground: 240 5.9% 10%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 10.6% 64.9%;
   }
 }
 
@@ -75,36 +72,37 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-neo-bg text-neo-text font-sans; /* Using neo-bg and neo-text, consider a specific neo-brutalist font later */
-  }
-
-  /* Specific styles for neo-brutalism */
-  .neo-card {
-    @apply bg-white border-2 border-neo-border p-4 shadow-neo-hard rounded-none;
-  }
-
-  .neo-input {
-    @apply bg-white border-2 border-neo-border p-2 rounded-none focus:ring-2 focus:ring-neo-accent focus:border-neo-accent outline-none placeholder-gray-400;
-  }
-  
-  .neo-select {
-    @apply bg-white border-2 border-neo-border p-2 rounded-none appearance-none focus:ring-2 focus:ring-neo-accent focus:border-neo-accent outline-none;
-    /* Basic arrow, can be customized further with SVG */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%231A1A1A'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem; /* Make space for the arrow */
-  }
-
-  .neo-button {
-    @apply bg-neo-accent text-neo-border font-bold py-2 px-4 border-2 border-neo-border rounded-none shadow-neo-hard hover:bg-neo-accent-darker hover:shadow-none transform active:translate-y-px active:translate-x-px active:shadow-none transition-all duration-100;
-  }
-
-  .neo-button-secondary {
-    @apply bg-white text-neo-border font-bold py-2 px-4 border-2 border-neo-border rounded-none shadow-neo-hard hover:bg-gray-100 hover:shadow-none transform active:translate-y-px active:translate-x-px active:shadow-none transition-all duration-100;
+    @apply bg-background text-foreground;
   }
 }
 
+/* Elegant component styles */
+.elegant-card {
+  @apply bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300;
+}
+
+.elegant-button {
+  @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.elegant-button-primary {
+  @apply elegant-button bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:from-purple-700 hover:to-pink-600 focus:ring-purple-500;
+}
+
+.elegant-button-secondary {
+  @apply elegant-button bg-white/80 backdrop-blur-sm text-gray-900 border border-gray-200 hover:bg-gray-50 focus:ring-gray-500;
+}
+
+.elegant-input {
+  @apply w-full px-4 py-3 rounded-lg border border-gray-200 bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200;
+}
+
+.elegant-select {
+  @apply elegant-input appearance-none cursor-pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}

@@ -69,10 +69,9 @@ const Index = () => {
         const totalValueB = b.currentPrice * b.quantity;
         valB = totalCostB > 0 ? ((totalValueB - totalCostB) / totalCostB) * 100 : -Infinity;
       } else if (sortConfig.key === 'purchaseDate') {
-        // Handle undefined dates by pushing them to the end/beginning depending on sort order
         valA = a.purchaseDate ? new Date(a.purchaseDate).getTime() : (sortConfig.direction === 'asc' ? Infinity : -Infinity);
         valB = b.purchaseDate ? new Date(b.purchaseDate).getTime() : (sortConfig.direction === 'asc' ? Infinity : -Infinity);
-      } else { // 'name'
+      } else {
         valA = a[sortConfig.key];
         valB = b[sortConfig.key];
       }
@@ -87,25 +86,37 @@ const Index = () => {
   }, [assets, sortConfig, filterType]);
 
   return (
-    <div className="min-h-screen bg-neo-bg text-neo-text p-4 md:p-8 selection:bg-neo-accent selection:text-neo-bg">
-      <div className="mb-4">
-        <Link to="/" className="inline-flex items-center text-neo-accent hover:underline">
-          <ArrowLeft size={20} className="mr-2" />
-          Back to Home
-        </Link>
-      </div>
-      
-      <header className="mb-12 text-center">
-        <div className="inline-block border-2 border-neo-border p-4 shadow-neo-hard bg-white">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-neo-text flex items-center justify-center">
-                <Wallet size={48} className="mr-3 text-neo-accent" strokeWidth={2.5}/> My Asset Portfolio <TrendingUp size={48} className="ml-3 text-neo-accent" strokeWidth={2.5}/>
-            </h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-40">
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          <Link to="/" className="inline-flex items-center text-purple-600 hover:text-purple-700 transition-colors font-medium">
+            <ArrowLeft size={20} className="mr-2" />
+            Back to Home
+          </Link>
         </div>
-        <p className="mt-4 text-lg text-gray-700">Track your shares, bonds, and units in Tanzania.</p>
       </header>
+      
+      {/* Hero Header */}
+      <div className="py-12 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="elegant-card inline-block p-8 border-2 border-purple-100">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 flex items-center justify-center mb-4">
+              <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg mr-4">
+                <Wallet size={32} className="text-white" strokeWidth={2.5}/>
+              </div>
+              My Asset Portfolio
+              <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg ml-4">
+                <TrendingUp size={32} className="text-white" strokeWidth={2.5}/>
+              </div>
+            </h1>
+            <p className="text-lg text-gray-600">Track your shares, bonds, and units with elegance and precision.</p>
+          </div>
+        </div>
+      </div>
 
-      <main className="max-w-4xl mx-auto">
-        <PortfolioSummary assets={assets} /> {/* Summary uses original assets for overall picture */}
+      <main className="max-w-4xl mx-auto px-4 pb-12">
+        <PortfolioSummary assets={assets} />
         <AssetForm onAddAsset={handleAddAsset} />
         <AssetList 
           assets={processedAssets} 
@@ -124,8 +135,8 @@ const Index = () => {
         onOpenChange={setIsDetailModalOpen}
       />
 
-      <footer className="text-center mt-12 py-6 border-t-2 border-neo-border">
-        <p className="text-sm text-gray-600">&copy; {new Date().getFullYear()} TZ Portfolio Tracker. Brutally Yours.</p>
+      <footer className="text-center py-8 border-t border-gray-200 bg-white/50 backdrop-blur-sm">
+        <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} TZ Portfolio Tracker. Crafted with excellence.</p>
       </footer>
     </div>
   );
