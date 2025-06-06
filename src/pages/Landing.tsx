@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, BookOpen, Newspaper, FileText, Wallet, ArrowRight, BarChart3, Shield, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { HeroSectionDemo } from '@/components/HeroSectionDemo';
 
 const Landing = () => {
   const features = [
@@ -38,7 +38,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-neo-bg text-neo-text">
       {/* Header */}
-      <header className="border-b-2 border-neo-border bg-white">
+      <header className="border-b-2 border-neo-border bg-white relative z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Wallet size={32} className="text-neo-accent" strokeWidth={2.5} />
@@ -54,30 +54,7 @@ const Landing = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="inline-block border-2 border-neo-border p-8 shadow-neo-hard bg-white mb-8">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-neo-text mb-6">
-              Master Your <span className="text-neo-accent">Investment</span> Journey
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">
-              Track your portfolio, learn from experts, and stay informed with Tanzania's most comprehensive investment platform.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/portfolio">
-                <Button className="neo-button text-lg px-8 py-4 flex items-center">
-                  Start Tracking <ArrowRight size={20} className="ml-2" />
-                </Button>
-              </Link>
-              <Link to="/learning">
-                <Button className="neo-button-secondary text-lg px-8 py-4 flex items-center">
-                  Learn More <BookOpen size={20} className="ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSectionDemo />
 
       {/* Stats Section */}
       <section className="py-16 px-4 bg-white border-y-2 border-neo-border">
