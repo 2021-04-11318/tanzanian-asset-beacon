@@ -69,8 +69,8 @@ const Index = () => {
           user_id: user?.id,
           name: asset.name,
           type: asset.type,
-          purchase_price: asset.purchasePrice,
-          current_price: asset.currentPrice,
+          purchase_price: asset.purchasePrice.toString(),
+          current_price: asset.currentPrice.toString(),
           quantity: asset.quantity,
           purchase_date: asset.purchaseDate,
         })
