@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -43,8 +42,8 @@ const Index = () => {
         id: asset.id,
         name: asset.name,
         type: asset.type as AssetType,
-        purchasePrice: parseFloat(asset.purchase_price),
-        currentPrice: parseFloat(asset.current_price),
+        purchasePrice: parseFloat(asset.purchase_price.toString()),
+        currentPrice: parseFloat(asset.current_price.toString()),
         quantity: asset.quantity,
         purchaseDate: asset.purchase_date,
       }));
@@ -69,8 +68,8 @@ const Index = () => {
           user_id: user?.id,
           name: asset.name,
           type: asset.type,
-          purchase_price: asset.purchasePrice.toString(),
-          current_price: asset.currentPrice.toString(),
+          purchase_price: asset.purchasePrice,
+          current_price: asset.currentPrice,
           quantity: asset.quantity,
           purchase_date: asset.purchaseDate,
         })
@@ -83,8 +82,8 @@ const Index = () => {
         id: data.id,
         name: data.name,
         type: data.type as AssetType,
-        purchasePrice: parseFloat(data.purchase_price),
-        currentPrice: parseFloat(data.current_price),
+        purchasePrice: parseFloat(data.purchase_price.toString()),
+        currentPrice: parseFloat(data.current_price.toString()),
         quantity: data.quantity,
         purchaseDate: data.purchase_date,
       };
