@@ -1,11 +1,14 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TrendingUp, BookOpen, Newspaper, FileText, Wallet, ArrowRight, BarChart3, Shield, Users } from 'lucide-react';
+import { TrendingUp, BookOpen, Newspaper, FileText, Wallet, ArrowRight, BarChart3, Shield, Users, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HeroSectionDemo } from '@/components/HeroSectionDemo';
+import { useAuth } from '@/hooks/useAuth';
 
 const Landing = () => {
+  const { user } = useAuth();
+
   const features = [
     {
       icon: <BarChart3 size={48} className="text-purple-600" />,
@@ -50,10 +53,26 @@ const Landing = () => {
             </h1>
           </div>
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/portfolio" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Portfolio</Link>
-            <Link to="/learning" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Learning</Link>
-            <Link to="/news" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">News</Link>
-            <Link to="/reports" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Reports</Link>
+            {user ? (
+              <>
+                <Link to="/portfolio" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Portfolio</Link>
+                <Link to="/learning" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Learning</Link>
+                <Link to="/news" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">News</Link>
+                <Link to="/reports" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Reports</Link>
+              </>
+            ) : (
+              <>
+                <Link to="/learning" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Learning</Link>
+                <Link to="/news" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">News</Link>
+                <Link to="/reports" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Reports</Link>
+                <Link to="/auth">
+                  <button className="elegant-button-primary flex items-center">
+                    <LogIn size={16} className="mr-2" />
+                    Sign In
+                  </button>
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       </header>
@@ -118,19 +137,39 @@ const Landing = () => {
               Start your investment journey today with Tanzania's most trusted portfolio tracking platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/portfolio">
-                <button className="elegant-button-primary flex items-center text-lg px-8 py-4">
-                  <Wallet size={20} className="mr-2" />
-                  Access Portfolio
-                  <ArrowRight size={16} className="ml-2" />
-                </button>
-              </Link>
-              <Link to="/learning">
-                <button className="elegant-button-secondary flex items-center text-lg px-8 py-4">
-                  <BookOpen size={20} className="mr-2" />
-                  Start Learning
-                </button>
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/portfolio">
+                    <button className="elegant-button-primary flex items-center text-lg px-8 py-4">
+                      <Wallet size={20} className="mr-2" />
+                      Access Portfolio
+                      <ArrowRight size={16} className="ml-2" />
+                    </button>
+                  </Link>
+                  <Link to="/learning">
+                    <button className="elegant-button-secondary flex items-center text-lg px-8 py-4">
+                      <BookOpen size={20} className="mr-2" />
+                      Start Learning
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/auth">
+                    <button className="elegant-button-primary flex items-center text-lg px-8 py-4">
+                      <LogIn size={20} className="mr-2" />
+                      Get Started
+                      <ArrowRight size={16} className="ml-2" />
+                    </button>
+                  </Link>
+                  <Link to="/learning">
+                    <button className="elegant-button-secondary flex items-center text-lg px-8 py-4">
+                      <BookOpen size={20} className="mr-2" />
+                      Learn More
+                    </button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

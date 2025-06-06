@@ -9,7 +9,105 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      assets: {
+        Row: {
+          created_at: string | null
+          current_price: number
+          id: string
+          name: string
+          purchase_date: string | null
+          purchase_price: number
+          quantity: number
+          type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_price: number
+          id?: string
+          name: string
+          purchase_date?: string | null
+          purchase_price: number
+          quantity: number
+          type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_price?: number
+          id?: string
+          name?: string
+          purchase_date?: string | null
+          purchase_price?: number
+          quantity?: number
+          type?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      market_data: {
+        Row: {
+          change_24h: number | null
+          change_percentage_24h: number | null
+          current_price: number
+          id: string
+          last_updated: string | null
+          market_cap: number | null
+          name: string
+          symbol: string
+          volume_24h: number | null
+        }
+        Insert: {
+          change_24h?: number | null
+          change_percentage_24h?: number | null
+          current_price: number
+          id?: string
+          last_updated?: string | null
+          market_cap?: number | null
+          name: string
+          symbol: string
+          volume_24h?: number | null
+        }
+        Update: {
+          change_24h?: number | null
+          change_percentage_24h?: number | null
+          current_price?: number
+          id?: string
+          last_updated?: string | null
+          market_cap?: number | null
+          name?: string
+          symbol?: string
+          volume_24h?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

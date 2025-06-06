@@ -1,23 +1,107 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import AssetForm from '@/components/AssetForm';
 import AssetList from '@/components/AssetList';
 import AssetDetailModal from '@/components/AssetDetailModal';
 import PortfolioSummary from '@/components/PortfolioSummary';
+import MarketInsights from '@/components/MarketInsights';
 import { Asset, AssetType, SortConfig, SortKey } from '@/types';
-import { Wallet, TrendingUp, ArrowLeft } from 'lucide-react';
+import { Wallet, TrendingUp, ArrowLeft, LogOut, User } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
   const [assets, setAssets] = useState<Asset[]>([]);
   const [selectedAssetForDetail, setSelectedAssetForDetail] = useState<Asset | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'name', direction: 'asc' });
   const [filterType, setFilterType] = useState<AssetType | 'All'>('All');
 
-  const handleAddAsset = (asset: Asset) => {
-    setAssets((prevAssets) => [...prevAssets, { ...asset, id: asset.id || crypto.randomUUID() }]);
+  // Load assets from Supabase
+  useEffect(() => {
+    if (user) {
+      loadAssets();
+    }
+  }, [user]);
+
+  const loadAssets = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('assets')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const formattedAssets = data.map(asset => ({
+        id: asset.id,
+        name: asset.name,
+        type: asset.type as AssetType,
+        purchasePrice: parseFloat(asset.purchase_price),
+        currentPrice: parseFloat(asset.current_price),
+        quantity: asset.quantity,
+        purchaseDate: asset.purchase_date,
+      }));
+
+      setAssets(formattedAssets);
+    } catch (error: any) {
+      toast({
+        title: "Error loading assets",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddAsset = async (asset: Asset) => {
+    try {
+      const { data, error } = await supabase
+        .from('assets')
+        .insert({
+          user_id: user?.id,
+          name: asset.name,
+          type: asset.type,
+          purchase_price: asset.purchasePrice,
+          current_price: asset.currentPrice,
+          quantity: asset.quantity,
+          purchase_date: asset.purchaseDate,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      const newAsset = {
+        id: data.id,
+        name: data.name,
+        type: data.type as AssetType,
+        purchasePrice: parseFloat(data.purchase_price),
+        currentPrice: parseFloat(data.current_price),
+        quantity: data.quantity,
+        purchaseDate: data.purchase_date,
+      };
+
+      setAssets(prev => [newAsset, ...prev]);
+      
+      toast({
+        title: "Asset added successfully",
+        description: `${asset.name} has been added to your portfolio.`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error adding asset",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   const handleViewDetails = (assetId: string) => {
@@ -39,6 +123,22 @@ const Index = () => {
     setFilterType(type);
   };
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out successfully",
+        description: "You have been logged out of your account.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const assetTypes: AssetType[] = useMemo(() => {
     const types = new Set(assets.map(asset => asset.type));
     return Array.from(types);
@@ -47,12 +147,10 @@ const Index = () => {
   const processedAssets = useMemo(() => {
     let sortedAssets = [...assets];
 
-    // Filtering
     if (filterType !== 'All') {
       sortedAssets = sortedAssets.filter(asset => asset.type === filterType);
     }
 
-    // Sorting
     sortedAssets.sort((a, b) => {
       let valA: any;
       let valB: any;
@@ -85,15 +183,39 @@ const Index = () => {
     return sortedAssets;
   }, [assets, sortConfig, filterType]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
+        <div className="elegant-card p-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="text-gray-600 mt-4 text-center">Loading your portfolio...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-4 py-4">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="inline-flex items-center text-purple-600 hover:text-purple-700 transition-colors font-medium">
             <ArrowLeft size={20} className="mr-2" />
             Back to Home
           </Link>
+          <div className="flex items-center space-x-4">
+            <span className="text-gray-600 flex items-center">
+              <User size={16} className="mr-2" />
+              {user?.email}
+            </span>
+            <button
+              onClick={handleSignOut}
+              className="elegant-button-secondary flex items-center"
+            >
+              <LogOut size={16} className="mr-2" />
+              Sign Out
+            </button>
+          </div>
         </div>
       </header>
       
@@ -116,6 +238,7 @@ const Index = () => {
       </div>
 
       <main className="max-w-4xl mx-auto px-4 pb-12">
+        <MarketInsights />
         <PortfolioSummary assets={assets} />
         <AssetForm onAddAsset={handleAddAsset} />
         <AssetList 
