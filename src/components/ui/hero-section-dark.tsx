@@ -90,11 +90,11 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
               </h1>
               <h2 className="text-4xl tracking-tighter font-geist bg-clip-text text-transparent mx-auto md:text-6xl bg-[linear-gradient(180deg,_#000_0%,_rgba(0,_0,_0,_0.75)_100%)] dark:bg-[linear-gradient(180deg,_#FFF_0%,_rgba(255,_255,_255,_0.00)_202.08%)]">
                 {subtitle.regular}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 dark:from-purple-300 dark:to-orange-200">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 dark:from-purple-400 dark:to-pink-400 font-bold">
                   {subtitle.gradient}
                 </span>
               </h2>
-              <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
+              <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-300 text-lg">
                 {description}
               </p>
               <div className="items-center justify-center gap-x-3 space-y-3 sm:flex sm:space-y-0">
@@ -103,7 +103,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                   <div className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-white dark:bg-gray-950 text-xs font-medium backdrop-blur-3xl">
                     <a
                       href={ctaHref}
-                      className="inline-flex rounded-full text-center group items-center w-full justify-center bg-gradient-to-tr from-zinc-300/20 via-purple-400/30 to-transparent dark:from-zinc-300/5 dark:via-purple-400/20 text-gray-900 dark:text-white border-input border-[1px] hover:bg-gradient-to-tr hover:from-zinc-300/30 hover:via-purple-400/40 hover:to-transparent dark:hover:from-zinc-300/10 dark:hover:via-purple-400/30 transition-all sm:w-auto py-4 px-10"
+                      className="inline-flex rounded-full text-center group items-center w-full justify-center bg-gradient-to-tr from-purple-600 via-purple-500 to-pink-500 dark:from-purple-500 dark:via-purple-400 dark:to-pink-400 text-white border-input border-[1px] hover:bg-gradient-to-tr hover:from-purple-700 hover:via-purple-600 hover:to-pink-600 hover:scale-105 transition-all sm:w-auto py-4 px-10 font-semibold"
                     >
                       {ctaText}
                     </a>
@@ -116,12 +116,12 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 <img
                   src={bottomImage.light}
                   className="w-full shadow-lg rounded-lg border border-gray-200 dark:hidden"
-                  alt="Dashboard preview"
+                  alt="TZ Portfolio Tracker Dashboard Preview"
                 />
                 <img
                   src={bottomImage.dark}
                   className="hidden w-full shadow-lg rounded-lg border border-gray-800 dark:block"
-                  alt="Dashboard preview"
+                  alt="TZ Portfolio Tracker Dashboard Preview"
                 />
               </div>
             )}
