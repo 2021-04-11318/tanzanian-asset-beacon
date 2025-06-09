@@ -1,14 +1,17 @@
 
 import React, { useState } from 'react';
-import { Bot, Send, Loader2 } from 'lucide-react';
+import { Bot, Send, Loader2, TrendingUp, BarChart3, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const MarketInsights = () => {
   const [query, setQuery] = useState('');
   const [insights, setInsights] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
   const { session } = useAuth();
   const { toast } = useToast();
 
@@ -38,6 +41,31 @@ const MarketInsights = () => {
     }
   };
 
+  const getInsightIcon = (text: string) => {
+    if (text.includes('Market Overview') || text.includes('market cap')) {
+      return <BarChart3 size={16} className="text-blue-600" />;
+    }
+    if (text.includes('Top Performer') || text.includes('up ')) {
+      return <TrendingUp size={16} className="text-green-600" />;
+    }
+    if (text.includes('sentiment')) {
+      return <BarChart3 size={16} className="text-purple-600" />;
+    }
+    return null;
+  };
+
+  const formatInsights = (text: string) => {
+    return text.split('\n').map((line, index) => {
+      const icon = getInsightIcon(line);
+      return (
+        <div key={index} className="flex items-start gap-2">
+          {icon && <div className="mt-1">{icon}</div>}
+          <span className={icon ? '' : 'ml-6'}>{line}</span>
+        </div>
+      );
+    });
+  };
+
   return (
     <div className="elegant-card p-6 border-2 border-purple-100 mb-8">
       <div className="flex items-center mb-4">
@@ -51,7 +79,7 @@ const MarketInsights = () => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Ask about market trends, top performers, or investment recommendations..."
+            placeholder="Ask about market trends, sectors, or stocks in Tanzania..."
             className="elegant-input flex-1"
             disabled={loading}
           />
@@ -71,9 +99,22 @@ const MarketInsights = () => {
 
       {insights && (
         <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
-          <pre className="whitespace-pre-wrap text-gray-800 text-sm leading-relaxed font-medium">
-            {insights}
-          </pre>
+          <div className="whitespace-pre-wrap text-gray-800 text-sm leading-relaxed font-medium space-y-2">
+            {formatInsights(insights)}
+          </div>
+          
+          <Collapsible open={isDisclaimerOpen} onOpenChange={setIsDisclaimerOpen} className="mt-4">
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-xs text-gray-600 p-0 h-auto font-normal">
+                <AlertCircle size={12} className="mr-1" />
+                Disclaimer
+                {isDisclaimerOpen ? <ChevronUp size={12} className="ml-1" /> : <ChevronDown size={12} className="ml-1" />}
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="text-xs text-gray-500 mt-2 pt-2 border-t border-gray-200">
+              This analysis is for educational purposes only. Always consult with a qualified financial advisor before making investment decisions.
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       )}
     </div>

@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,8 +9,9 @@ import AssetDetailModal from '@/components/AssetDetailModal';
 import PortfolioSummary from '@/components/PortfolioSummary';
 import MarketInsights from '@/components/MarketInsights';
 import { Asset, AssetType, SortConfig, SortKey } from '@/types';
-import { Wallet, TrendingUp, ArrowLeft, LogOut, User } from 'lucide-react';
+import { Wallet, TrendingUp, ArrowLeft, LogOut, User, Shield, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const { user, signOut } = useAuth();
@@ -65,7 +67,6 @@ const Index = () => {
       const { data, error } = await supabase
         .from('assets')
         .insert({
-          user_id: user?.id,
           name: asset.name,
           type: asset.type,
           purchase_price: asset.purchasePrice,
@@ -138,6 +139,42 @@ const Index = () => {
     }
   };
 
+  const handleExportData = () => {
+    if (assets.length === 0) {
+      toast({
+        title: "No data to export",
+        description: "Add some assets to your portfolio first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const csvContent = [
+      ['Asset Name', 'Type', 'Quantity', 'Purchase Price', 'Current Price', 'Purchase Date'].join(','),
+      ...assets.map(asset => [
+        asset.name,
+        asset.type,
+        asset.quantity,
+        asset.purchasePrice,
+        asset.currentPrice,
+        asset.purchaseDate || ''
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `portfolio_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    toast({
+      title: "Portfolio exported",
+      description: "Your portfolio data has been downloaded as a CSV file.",
+    });
+  };
+
   const assetTypes: AssetType[] = useMemo(() => {
     const types = new Set(assets.map(asset => asset.type));
     return Array.from(types);
@@ -197,37 +234,48 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="inline-flex items-center text-purple-600 hover:text-purple-700 transition-colors font-medium">
             <ArrowLeft size={20} className="mr-2" />
-            Back to Home
+            <span className="hidden sm:inline">Back to Home</span>
           </Link>
-          <div className="flex items-center space-x-4">
-            <span className="text-gray-600 flex items-center">
-              <User size={16} className="mr-2" />
-              {user?.email}
-            </span>
+          <div className="flex items-center space-x-2 md:space-x-4">
+            <div className="hidden md:flex items-center text-gray-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
+              <Shield size={16} className="mr-2 text-green-600" />
+              <span className="text-sm">Securely signed in as {user?.email}</span>
+            </div>
+            {assets.length > 0 && (
+              <Button
+                onClick={handleExportData}
+                variant="outline"
+                size="sm"
+                className="hidden md:flex items-center"
+              >
+                <Download size={16} className="mr-2" />
+                Export CSV
+              </Button>
+            )}
             <button
               onClick={handleSignOut}
-              className="elegant-button-secondary flex items-center"
+              className="elegant-button-secondary flex items-center text-sm"
             >
               <LogOut size={16} className="mr-2" />
-              Sign Out
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         </div>
       </header>
       
       {/* Hero Header */}
-      <div className="py-12 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="elegant-card inline-block p-8 border-2 border-purple-100">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 flex items-center justify-center mb-4">
-              <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg mr-4">
+      <div className="py-8 md:py-12 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="elegant-card inline-block p-6 md:p-8 border-2 border-purple-100">
+            <h1 className="text-3xl md:text-5xl font-bold text-gray-900 flex items-center justify-center mb-4 flex-wrap gap-2">
+              <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg">
                 <Wallet size={32} className="text-white" strokeWidth={2.5}/>
               </div>
-              My Asset Portfolio
-              <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg ml-4">
+              <span className="mx-2">My Asset Portfolio</span>
+              <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg">
                 <TrendingUp size={32} className="text-white" strokeWidth={2.5}/>
               </div>
             </h1>
@@ -236,7 +284,7 @@ const Index = () => {
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto px-4 pb-12">
+      <main className="max-w-6xl mx-auto px-4 pb-12">
         <MarketInsights />
         <PortfolioSummary assets={assets} />
         <AssetForm onAddAsset={handleAddAsset} />
