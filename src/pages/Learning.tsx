@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, ArrowLeft, Play, FileText, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import FinanceChatbot from '@/components/FinanceChatbot';
 
 const Learning = () => {
   const courses = [
@@ -54,6 +55,11 @@ const Learning = () => {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
               Master the art of investing with our comprehensive courses and expert-curated resources designed for the Tanzanian market.
             </p>
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-sm text-blue-700">
+                💡 <strong>New!</strong> Try our AI Finance Assistant - click the chat button in the bottom right to get instant answers to your investment questions!
+              </p>
+            </div>
           </div>
         </div>
 
@@ -105,6 +111,9 @@ const Learning = () => {
           </div>
         </div>
       </div>
+
+      {/* AI Chatbot */}
+      <FinanceChatbot />
     </div>
   );
 };

@@ -1,1 +1,5 @@
+
 project_id = "kumbxdfrnsyivifmhvfy"
+
+[functions.finance-chat]
+verify_jwt = false
