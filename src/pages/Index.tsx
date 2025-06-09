@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -44,8 +43,8 @@ const Index = () => {
         id: asset.id,
         name: asset.name,
         type: asset.type as AssetType,
-        purchasePrice: parseFloat(asset.purchase_price.toString()),
-        currentPrice: parseFloat(asset.current_price.toString()),
+        purchasePrice: Number(asset.purchase_price),
+        currentPrice: Number(asset.current_price),
         quantity: asset.quantity,
         purchaseDate: asset.purchase_date,
       }));
@@ -64,6 +63,15 @@ const Index = () => {
 
   const handleAddAsset = async (asset: Asset) => {
     try {
+      if (!user) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to add assets.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { data, error } = await supabase
         .from('assets')
         .insert({
@@ -73,6 +81,7 @@ const Index = () => {
           current_price: asset.currentPrice,
           quantity: asset.quantity,
           purchase_date: asset.purchaseDate,
+          user_id: user.id,
         })
         .select()
         .single();
@@ -83,8 +92,8 @@ const Index = () => {
         id: data.id,
         name: data.name,
         type: data.type as AssetType,
-        purchasePrice: parseFloat(data.purchase_price.toString()),
-        currentPrice: parseFloat(data.current_price.toString()),
+        purchasePrice: Number(data.purchase_price),
+        currentPrice: Number(data.current_price),
         quantity: data.quantity,
         purchaseDate: data.purchase_date,
       };
