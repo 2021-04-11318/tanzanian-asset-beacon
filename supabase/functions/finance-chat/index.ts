@@ -2,7 +2,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const deepseekApiKey = Deno.env.get('DEEPSEEK_API_KEY');
+const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -27,14 +27,16 @@ serve(async (req) => {
 
     console.log('Received message:', message);
 
-    const response = await fetch('https://api.deepseek.com/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${deepseekApiKey}`,
+        'Authorization': `Bearer ${openrouterApiKey}`,
+        'HTTP-Referer': 'https://your-investment-app.com',
+        'X-Title': 'Investment Learning Platform',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: 'deepseek/deepseek-r1-0528:free',
         messages: [
           {
             role: 'system',
@@ -51,12 +53,14 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      console.error('DeepSeek API error:', response.status, response.statusText);
-      throw new Error(`DeepSeek API error: ${response.status}`);
+      console.error('OpenRouter API error:', response.status, response.statusText);
+      const errorText = await response.text();
+      console.error('Error details:', errorText);
+      throw new Error(`OpenRouter API error: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('DeepSeek response:', data);
+    console.log('OpenRouter response:', data);
 
     const botResponse = data.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
 
