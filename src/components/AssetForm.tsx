@@ -8,13 +8,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { HelpCircle, TrendingUp, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 import AssetTypeIcon from './AssetTypeIcon';
+import { sanitizeInput, validateAssetInput, isRateLimited } from '@/utils/authSecurity';
 
 interface AssetFormProps {
   onAddAsset: (asset: Asset) => void;
 }
 
 const AssetForm: React.FC<AssetFormProps> = ({ onAddAsset }) => {
+  const { user } = useAuth();
   const [name, setName] = useState('');
   const [type, setType] = useState<AssetType>('Share');
   const [purchasePrice, setPurchasePrice] = useState('');
@@ -29,10 +32,13 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAddAsset }) => {
     
     switch (field) {
       case 'name':
-        if (!value.trim()) {
+        const sanitizedName = sanitizeInput(value);
+        if (!sanitizedName.trim()) {
           newErrors.name = 'Asset name is required';
-        } else if (value.trim().length < 2) {
+        } else if (sanitizedName.length < 2) {
           newErrors.name = 'Asset name must be at least 2 characters';
+        } else if (sanitizedName.length > 100) {
+          newErrors.name = 'Asset name must be less than 100 characters';
         } else {
           delete newErrors.name;
         }
@@ -44,6 +50,8 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAddAsset }) => {
           newErrors.quantity = 'Quantity must be a positive number';
         } else if (!Number.isInteger(Number(value))) {
           newErrors.quantity = 'Quantity must be a whole number';
+        } else if (Number(value) > 1000000) {
+          newErrors.quantity = 'Quantity cannot exceed 1,000,000';
         } else {
           delete newErrors.quantity;
         }
@@ -53,6 +61,8 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAddAsset }) => {
           newErrors.purchasePrice = 'Purchase price is required';
         } else if (isNaN(Number(value)) || Number(value) <= 0) {
           newErrors.purchasePrice = 'Purchase price must be a positive number';
+        } else if (Number(value) > 1000000) {
+          newErrors.purchasePrice = 'Purchase price cannot exceed 1,000,000';
         } else {
           delete newErrors.purchasePrice;
         }
@@ -62,6 +72,8 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAddAsset }) => {
           newErrors.currentPrice = 'Current price is required';
         } else if (isNaN(Number(value)) || Number(value) <= 0) {
           newErrors.currentPrice = 'Current price must be a positive number';
+        } else if (Number(value) > 1000000) {
+          newErrors.currentPrice = 'Current price cannot exceed 1,000,000';
         } else if (value && purchasePrice && Number(value) < Number(purchasePrice) * 0.5) {
           newErrors.currentPrice = 'Warning: Current price is significantly lower than purchase price';
         } else {
@@ -89,18 +101,60 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAddAsset }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to add assets.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check rate limiting
+    if (isRateLimited(`asset_creation_${user.id}`, 5, 60000)) {
+      toast({
+        title: "Too many requests",
+        description: "Please wait before adding another asset.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
+    // Sanitize inputs
+    const sanitizedName = sanitizeInput(name);
+    
     // Validate all fields
-    validateField('name', name);
+    validateField('name', sanitizedName);
     validateField('quantity', quantity);
     validateField('purchasePrice', purchasePrice);
     validateField('currentPrice', currentPrice);
     
-    if (!name.trim() || !purchasePrice || !currentPrice || !quantity) {
+    if (!sanitizedName.trim() || !purchasePrice || !currentPrice || !quantity) {
       toast({
         title: "Missing information",
         description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Server-side validation
+    const validationErrors = validateAssetInput({
+      name: sanitizedName,
+      type,
+      purchasePrice: parseFloat(purchasePrice),
+      currentPrice: parseFloat(currentPrice),
+      quantity: parseInt(quantity, 10),
+    });
+
+    if (validationErrors.length > 0) {
+      toast({
+        title: "Validation errors",
+        description: validationErrors.join(', '),
         variant: "destructive",
       });
       setIsSubmitting(false);
@@ -122,7 +176,7 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAddAsset }) => {
     try {
       const newAsset: Asset = {
         id: new Date().toISOString(),
-        name: name.trim(),
+        name: sanitizedName,
         type,
         purchasePrice: parseFloat(purchasePrice),
         currentPrice: parseFloat(currentPrice),
@@ -144,7 +198,8 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAddAsset }) => {
         title: "Asset added successfully! 🎉",
         description: `${newAsset.name} has been added to your portfolio.`,
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Error adding asset:', error);
       toast({
         title: "Error adding asset",
         description: "Please try again or contact support if the problem persists.",

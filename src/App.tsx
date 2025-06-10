@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ProtectedPages from "@/components/ProtectedPages";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Learning from "./pages/Learning";
@@ -14,7 +15,14 @@ import Reports from "./pages/Reports";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -31,9 +39,21 @@ const App = () => (
                 <Index />
               </ProtectedRoute>
             } />
-            <Route path="/learning" element={<Learning />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/reports" element={<Reports />} />
+            <Route path="/learning" element={
+              <ProtectedPages>
+                <Learning />
+              </ProtectedPages>
+            } />
+            <Route path="/news" element={
+              <ProtectedPages>
+                <News />
+              </ProtectedPages>
+            } />
+            <Route path="/reports" element={
+              <ProtectedPages>
+                <Reports />
+              </ProtectedPages>
+            } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

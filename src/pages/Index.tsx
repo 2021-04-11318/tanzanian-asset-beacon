@@ -12,6 +12,7 @@ import { Asset, AssetType, SortConfig, SortKey } from '@/types';
 import { Wallet, TrendingUp, ArrowLeft, LogOut, User, Shield, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
+import { secureSignOut, isRateLimited } from '@/utils/authSecurity';
 
 const Index = () => {
   const { user, signOut } = useAuth();
@@ -24,7 +25,7 @@ const Index = () => {
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'name', direction: 'asc' });
   const [filterType, setFilterType] = useState<AssetType | 'All'>('All');
 
-  // Load assets from Supabase
+  // Load assets from Supabase with error handling
   useEffect(() => {
     if (user) {
       loadAssets();
@@ -33,12 +34,35 @@ const Index = () => {
 
   const loadAssets = async () => {
     try {
+      if (!user) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to view your portfolio.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Check rate limiting for data fetching
+      if (isRateLimited(`data_fetch_${user.id}`, 30, 60000)) {
+        toast({
+          title: "Too many requests",
+          description: "Please wait before refreshing your data.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { data, error } = await supabase
         .from('assets')
         .select('*')
+        .eq('user_id', user.id) // Explicit user filtering for security
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error loading assets:', error);
+        throw error;
+      }
 
       const formattedAssets = data.map(asset => ({
         id: asset.id,
@@ -52,9 +76,10 @@ const Index = () => {
 
       setAssets(formattedAssets);
     } catch (error: any) {
+      console.error('Error loading assets:', error);
       toast({
         title: "Error loading assets",
-        description: error.message,
+        description: "Unable to load your portfolio. Please try refreshing the page.",
         variant: "destructive",
       });
     } finally {
@@ -73,6 +98,16 @@ const Index = () => {
         return;
       }
 
+      // Check rate limiting
+      if (isRateLimited(`asset_creation_${user.id}`, 5, 60000)) {
+        toast({
+          title: "Too many requests",
+          description: "Please wait before adding another asset.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { data, error } = await supabase
         .from('assets')
         .insert({
@@ -82,12 +117,15 @@ const Index = () => {
           current_price: asset.currentPrice,
           quantity: asset.quantity,
           purchase_date: asset.purchaseDate,
-          user_id: user.id,
+          user_id: user.id, // Explicitly set user_id for security
         })
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error adding asset:', error);
+        throw error;
+      }
 
       const newAsset = {
         id: data.id,
@@ -106,9 +144,10 @@ const Index = () => {
         description: `${asset.name} has been added to your portfolio.`,
       });
     } catch (error: any) {
+      console.error('Error adding asset:', error);
       toast({
         title: "Error adding asset",
-        description: error.message,
+        description: "Unable to add asset. Please check your input and try again.",
         variant: "destructive",
       });
     }
@@ -135,21 +174,27 @@ const Index = () => {
 
   const handleSignOut = async () => {
     try {
-      await signOut();
-      toast({
-        title: "Signed out successfully",
-        description: "You have been logged out of your account.",
-      });
+      await secureSignOut();
     } catch (error: any) {
+      console.error('Error signing out:', error);
       toast({
         title: "Error signing out",
-        description: error.message,
+        description: "There was an issue signing out. Please try again.",
         variant: "destructive",
       });
     }
   };
 
   const handleExportData = () => {
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to export data.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (assets.length === 0) {
       toast({
         title: "No data to export",
@@ -159,30 +204,49 @@ const Index = () => {
       return;
     }
 
-    const csvContent = [
-      ['Asset Name', 'Type', 'Quantity', 'Purchase Price', 'Current Price', 'Purchase Date'].join(','),
-      ...assets.map(asset => [
-        asset.name,
-        asset.type,
-        asset.quantity,
-        asset.purchasePrice,
-        asset.currentPrice,
-        asset.purchaseDate || ''
-      ].join(','))
-    ].join('\n');
+    // Check rate limiting for exports
+    if (isRateLimited(`export_${user.id}`, 3, 300000)) { // 3 exports per 5 minutes
+      toast({
+        title: "Export limit reached",
+        description: "Please wait 5 minutes before exporting again.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `portfolio_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    window.URL.revokeObjectURL(url);
+    try {
+      const csvContent = [
+        ['Asset Name', 'Type', 'Quantity', 'Purchase Price', 'Current Price', 'Purchase Date'].join(','),
+        ...assets.map(asset => [
+          `"${asset.name.replace(/"/g, '""')}"`, // Escape quotes in CSV
+          asset.type,
+          asset.quantity,
+          asset.purchasePrice,
+          asset.currentPrice,
+          asset.purchaseDate || ''
+        ].join(','))
+      ].join('\n');
 
-    toast({
-      title: "Portfolio exported",
-      description: "Your portfolio data has been downloaded as a CSV file.",
-    });
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `portfolio_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Portfolio exported",
+        description: "Your portfolio data has been downloaded as a CSV file.",
+      });
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      toast({
+        title: "Export failed",
+        description: "Unable to export portfolio data. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const assetTypes: AssetType[] = useMemo(() => {
