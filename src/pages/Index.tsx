@@ -7,6 +7,7 @@ import AssetList from '@/components/AssetList';
 import AssetDetailModal from '@/components/AssetDetailModal';
 import PortfolioSummary from '@/components/PortfolioSummary';
 import MarketInsights from '@/components/MarketInsights';
+import PortfolioMetrics from '@/components/PortfolioMetrics';
 import { Asset, AssetType, SortConfig, SortKey } from '@/types';
 import { Wallet, TrendingUp, ArrowLeft, LogOut, User, Shield, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -259,6 +260,7 @@ const Index = () => {
                 variant="outline"
                 size="sm"
                 className="hidden md:flex items-center"
+                aria-label="Export portfolio data as CSV"
               >
                 <Download size={16} className="mr-2" />
                 Export CSV
@@ -267,6 +269,7 @@ const Index = () => {
             <button
               onClick={handleSignOut}
               className="elegant-button-secondary flex items-center text-sm"
+              aria-label="Sign out of account"
             >
               <LogOut size={16} className="mr-2" />
               <span className="hidden sm:inline">Sign Out</span>
@@ -295,6 +298,7 @@ const Index = () => {
 
       <main className="max-w-6xl mx-auto px-4 pb-12">
         <MarketInsights />
+        <PortfolioMetrics assets={assets} />
         <PortfolioSummary assets={assets} />
         <AssetForm onAddAsset={handleAddAsset} />
         <AssetList 

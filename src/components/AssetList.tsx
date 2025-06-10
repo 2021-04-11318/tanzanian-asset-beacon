@@ -4,7 +4,7 @@ import { Asset, AssetType, SortConfig, SortKey } from '@/types';
 import AssetListItem from './AssetListItem';
 import AssetListControls from './AssetListControls';
 import { Input } from '@/components/ui/input';
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface AssetListProps {
@@ -40,15 +40,37 @@ const AssetList: React.FC<AssetListProps> = ({
     }
   };
 
+  // Group similar assets for better organization
+  const groupedAssets = filteredAssets.reduce((groups, asset) => {
+    const key = `${asset.name}-${asset.type}`;
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(asset);
+    return groups;
+  }, {} as Record<string, Asset[]>);
+
+  const totalAssets = filteredAssets.length;
+
   return (
     <div className="space-y-4 mt-8">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">My Portfolio Holdings</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">My Portfolio Holdings</h2>
+          {totalAssets > 0 && (
+            <p className="text-sm text-gray-600 mt-1">
+              Showing {totalAssets} asset{totalAssets !== 1 ? 's' : ''} 
+              {searchTerm && ` matching "${searchTerm}"`}
+              {filterType !== 'All' && ` filtered by ${filterType}`}
+            </p>
+          )}
+        </div>
         {assets.length > 0 && (
           <Button 
             onClick={scrollToAddForm}
-            className="elegant-button-primary md:hidden"
+            className="elegant-button-primary sm:hidden"
             size="sm"
+            aria-label="Scroll to add asset form"
           >
             <Plus size={16} className="mr-2" />
             Add Asset
@@ -66,15 +88,16 @@ const AssetList: React.FC<AssetListProps> = ({
             assetTypes={availableAssetTypes}
           />
           
-          {assets.length > 5 && (
+          {assets.length > 3 && (
             <div className="relative">
-              <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" aria-hidden="true" />
               <Input
                 type="text"
                 placeholder="Search assets by name or type..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="elegant-input pl-10"
+                aria-label="Search assets"
               />
             </div>
           )}
@@ -88,7 +111,11 @@ const AssetList: React.FC<AssetListProps> = ({
             <p className="text-gray-600 mb-4">
               No assets yet. Add your first asset above to begin tracking your portfolio performance and get AI-powered insights.
             </p>
-            <Button onClick={scrollToAddForm} className="elegant-button-primary">
+            <Button 
+              onClick={scrollToAddForm} 
+              className="elegant-button-primary"
+              aria-label="Scroll to add first asset"
+            >
               <Plus size={16} className="mr-2" />
               Add Your First Asset
             </Button>
@@ -96,13 +123,37 @@ const AssetList: React.FC<AssetListProps> = ({
         </div>
       ) : filteredAssets.length === 0 && searchTerm ? (
         <div className="elegant-card p-6 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Search size={20} className="text-gray-400" />
+            <h3 className="text-lg font-semibold text-gray-700">No matching assets</h3>
+          </div>
           <p className="text-gray-500">
             No assets match your search for "{searchTerm}". Try a different search term.
           </p>
+          <Button 
+            onClick={() => setSearchTerm('')}
+            variant="outline"
+            className="mt-3"
+            size="sm"
+          >
+            Clear search
+          </Button>
         </div>
       ) : filteredAssets.length === 0 && filterType !== 'All' ? (
         <div className="elegant-card p-6 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Filter size={20} className="text-gray-400" />
+            <h3 className="text-lg font-semibold text-gray-700">No assets in this category</h3>
+          </div>
           <p className="text-gray-500">No assets match the current filter "{filterType}".</p>
+          <Button 
+            onClick={() => onFilterChange('All')}
+            variant="outline"
+            className="mt-3"
+            size="sm"
+          >
+            View all assets
+          </Button>
         </div>
       ) : (
         <div className="space-y-4">
