@@ -1,13 +1,14 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, ArrowLeft, Play, FileText, TrendingUp, CheckCircle, Clock, Users, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import FinanceChatbot from '@/components/FinanceChatbot';
+import CourseContent from '@/components/CourseContent';
 
 const Learning = () => {
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
+  const [activeCourse, setActiveCourse] = useState<number | null>(null);
 
   const courses = [
     {
@@ -196,7 +197,13 @@ const Learning = () => {
           </div>
 
           <div className="flex space-x-4">
-            <Button className="elegant-button-primary flex-1">
+            <Button 
+              className="elegant-button-primary flex-1"
+              onClick={() => {
+                setActiveCourse(course.id);
+                onClose();
+              }}
+            >
               <Play size={16} className="mr-2" />
               Start Course
             </Button>
@@ -317,6 +324,14 @@ const Learning = () => {
         <CourseDetailModal 
           course={courses.find(c => c.id === selectedCourse)} 
           onClose={() => setSelectedCourse(null)} 
+        />
+      )}
+
+      {/* Active Course Content */}
+      {activeCourse && (
+        <CourseContent
+          courseId={activeCourse}
+          onClose={() => setActiveCourse(null)}
         />
       )}
 
