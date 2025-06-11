@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { MessageCircle, Send, Bot, User, Loader2 } from 'lucide-react';
+import { MessageCircle, Send, Bot, User, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 
 interface Message {
   id: string;
@@ -24,6 +25,7 @@ const FinanceChatbot = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
   const { toast } = useToast();
 
   const sendMessage = async () => {
@@ -50,7 +52,7 @@ const FinanceChatbot = () => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.response,
+        content: data.reply,
         timestamp: new Date()
       };
 
@@ -74,6 +76,61 @@ const FinanceChatbot = () => {
     }
   };
 
+  const formatMessage = (content: string) => {
+    // Split by double newlines for paragraphs
+    const paragraphs = content.split('\n\n');
+    
+    return paragraphs.map((paragraph, index) => {
+      // Handle bullet points
+      if (paragraph.includes('•') || paragraph.includes('-')) {
+        const lines = paragraph.split('\n');
+        return (
+          <div key={index} className="mb-3">
+            {lines.map((line, lineIndex) => {
+              if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
+                return (
+                  <div key={lineIndex} className="flex items-start mb-1">
+                    <span className="text-purple-600 mr-2 text-sm">•</span>
+                    <span className="text-sm leading-relaxed">{line.replace(/^[•-]\s*/, '')}</span>
+                  </div>
+                );
+              }
+              return <p key={lineIndex} className="text-sm leading-relaxed mb-2">{line}</p>;
+            })}
+          </div>
+        );
+      }
+      
+      // Handle numbered lists
+      if (/^\d+\./.test(paragraph.trim())) {
+        const lines = paragraph.split('\n');
+        return (
+          <div key={index} className="mb-3">
+            {lines.map((line, lineIndex) => {
+              const match = line.match(/^(\d+)\.\s*(.+)/);
+              if (match) {
+                return (
+                  <div key={lineIndex} className="flex items-start mb-2">
+                    <span className="text-purple-600 font-semibold mr-2 text-sm">{match[1]}.</span>
+                    <span className="text-sm leading-relaxed">{match[2]}</span>
+                  </div>
+                );
+              }
+              return <p key={lineIndex} className="text-sm leading-relaxed mb-1">{line}</p>;
+            })}
+          </div>
+        );
+      }
+      
+      // Regular paragraphs
+      return (
+        <p key={index} className="text-sm leading-relaxed mb-3">
+          {paragraph}
+        </p>
+      );
+    });
+  };
+
   if (!isOpen) {
     return (
       <div className="fixed bottom-6 right-6 z-50">
@@ -87,8 +144,12 @@ const FinanceChatbot = () => {
     );
   }
 
+  const chatWindowClass = isMaximized 
+    ? "fixed inset-4 z-50 elegant-card border-2 border-purple-100 flex flex-col" 
+    : "fixed bottom-6 right-6 z-50 w-96 h-[500px] elegant-card border-2 border-purple-100 flex flex-col";
+
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-96 h-[500px] elegant-card border-2 border-purple-100 flex flex-col">
+    <div className={chatWindowClass}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <div className="flex items-center space-x-2">
@@ -100,14 +161,24 @@ const FinanceChatbot = () => {
             <p className="text-xs text-gray-500">Investment guidance & market insights</p>
           </div>
         </div>
-        <Button
-          onClick={() => setIsOpen(false)}
-          variant="ghost"
-          size="sm"
-          className="text-gray-500 hover:text-gray-700"
-        >
-          ×
-        </Button>
+        <div className="flex space-x-1">
+          <Button
+            onClick={() => setIsMaximized(!isMaximized)}
+            variant="ghost"
+            size="sm"
+            className="text-gray-500 hover:text-gray-700"
+          >
+            {isMaximized ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </Button>
+          <Button
+            onClick={() => setIsOpen(false)}
+            variant="ghost"
+            size="sm"
+            className="text-gray-500 hover:text-gray-700"
+          >
+            ×
+          </Button>
+        </div>
       </div>
 
       {/* Messages */}
@@ -120,21 +191,27 @@ const FinanceChatbot = () => {
             }`}
           >
             {message.role === 'assistant' && (
-              <div className="p-1 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full">
+              <div className="p-1 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full flex-shrink-0 mt-1">
                 <Bot size={16} className="text-white" />
               </div>
             )}
             <div
-              className={`max-w-[70%] p-3 rounded-lg ${
+              className={`max-w-[80%] p-4 rounded-lg ${
                 message.role === 'user'
                   ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white'
-                  : 'bg-gray-100 text-gray-900'
+                  : 'bg-gray-50 text-gray-900 border border-gray-200'
               }`}
             >
-              <p className="text-sm leading-relaxed">{message.content}</p>
+              {message.role === 'assistant' ? (
+                <div className="prose prose-sm max-w-none">
+                  {formatMessage(message.content)}
+                </div>
+              ) : (
+                <p className="text-sm leading-relaxed">{message.content}</p>
+              )}
             </div>
             {message.role === 'user' && (
-              <div className="p-1 bg-gray-300 rounded-full">
+              <div className="p-1 bg-gray-300 rounded-full flex-shrink-0 mt-1">
                 <User size={16} className="text-gray-600" />
               </div>
             )}
@@ -145,8 +222,11 @@ const FinanceChatbot = () => {
             <div className="p-1 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full">
               <Bot size={16} className="text-white" />
             </div>
-            <div className="bg-gray-100 p-3 rounded-lg">
-              <Loader2 size={16} className="animate-spin text-purple-600" />
+            <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+              <div className="flex items-center space-x-2">
+                <Loader2 size={16} className="animate-spin text-purple-600" />
+                <span className="text-sm text-gray-600">Thinking...</span>
+              </div>
             </div>
           </div>
         )}
