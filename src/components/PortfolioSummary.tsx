@@ -32,11 +32,11 @@ const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ assets }) => {
 
   return (
     <Card className="neo-card mb-8">
-      <CardHeader>
+      <CardHeader className="pb-4">
         <CardTitle className="text-2xl font-bold text-neo-text">Portfolio Overview</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           <div className="neo-card p-4 bg-white !shadow-none border-2 border-dashed border-neo-border">
             <h3 className="text-lg font-semibold text-neo-text">Total Value</h3>
             <p className="text-2xl font-bold text-neo-accent">
@@ -52,29 +52,33 @@ const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ assets }) => {
               ({overallReturnPercentage.toFixed(2)}%)
             </p>
           </div>
-          <div className="md:col-span-1 h-[200px] md:h-auto neo-card p-4 bg-white !shadow-none border-2 border-dashed border-neo-border">
-             <h3 className="text-lg font-semibold text-neo-text mb-2 text-center md:text-left">Asset Allocation</h3>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={assetAllocationData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={60}
-                  fill="#8884d8"
-                  dataKey="value"
-                  nameKey="name"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                >
-                  {assetAllocationData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip wrapperClassName="neo-card !bg-white !border-neo-border" formatter={(value: number) => `TZS ${value.toLocaleString()}`} />
-                <Legend wrapperStyle={{fontSize: "12px"}}/>
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="lg:col-span-2 neo-card p-4 bg-white !shadow-none border-2 border-dashed border-neo-border">
+            <h3 className="text-lg font-semibold text-neo-text mb-3 text-center">Asset Allocation</h3>
+            <div className="h-[180px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={assetAllocationData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={70}
+                    fill="#8884d8"
+                    dataKey="value"
+                    nameKey="name"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {assetAllocationData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    wrapperClassName="neo-card !bg-white !border-neo-border" 
+                    formatter={(value: number) => `TZS ${value.toLocaleString()}`} 
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </CardContent>
