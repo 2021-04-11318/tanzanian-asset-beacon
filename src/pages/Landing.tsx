@@ -49,7 +49,7 @@ const Landing = () => {
       company: "Dar es Salaam",
       quote: "TZ Portfolio Tracker helped me organize my CRDB and NMB shares. The real-time updates keep me informed of my investments.",
       rating: 5,
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b043?w=64&h=64&fit=crop&crop=face"
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=64&h=64&fit=crop&crop=face"
     },
     {
       name: "John Mwalimu",
