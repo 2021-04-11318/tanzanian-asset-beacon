@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, BookOpen, Newspaper, FileText, Wallet, ArrowRight, BarChart3, Shield, Users, LogIn, Star, Mail, Instagram, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HeroSectionDemo } from '@/components/HeroSectionDemo';
+import InteractiveDemo from '@/components/InteractiveDemo';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
@@ -219,33 +219,32 @@ const Landing = () => {
 
       {/* Demo Section */}
       <section id="demo" className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
-            See TZ Portfolio Tracker in Action
-          </h2>
-          <div className="elegant-card p-8 border-2 border-purple-100">
-            <div className="aspect-video bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg mb-6 flex items-center justify-center">
-              <div className="text-center">
-                <BarChart3 size={64} className="text-purple-600 mx-auto mb-4" />
-                <p className="text-gray-600">Interactive demo coming soon</p>
-                <p className="text-sm text-gray-500 mt-2">Real portfolio dashboard preview</p>
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/auth">
-                <button className="elegant-button-primary flex items-center text-lg px-8 py-4 hover:scale-105 transition-transform">
-                  <Wallet size={20} className="mr-2" />
-                  Start Free Trial
-                  <ArrowRight size={16} className="ml-2" />
-                </button>
-              </Link>
-              <Link to="/learning">
-                <button className="elegant-button-secondary flex items-center text-lg px-8 py-4">
-                  <BookOpen size={20} className="mr-2" />
-                  Explore Features
-                </button>
-              </Link>
-            </div>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              See TZ Portfolio Tracker in <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">Action</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Experience the power of our platform with this interactive demo featuring real portfolio data and live updates.
+            </p>
+          </div>
+          
+          <InteractiveDemo />
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <Link to="/auth">
+              <button className="elegant-button-primary flex items-center text-lg px-8 py-4 hover:scale-105 transition-transform">
+                <Wallet size={20} className="mr-2" />
+                Start Free Trial
+                <ArrowRight size={16} className="ml-2" />
+              </button>
+            </Link>
+            <Link to="/learning">
+              <button className="elegant-button-secondary flex items-center text-lg px-8 py-4">
+                <BookOpen size={20} className="mr-2" />
+                Explore Features
+              </button>
+            </Link>
           </div>
         </div>
       </section>
