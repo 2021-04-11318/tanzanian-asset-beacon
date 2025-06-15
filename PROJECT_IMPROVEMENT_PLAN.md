@@ -1,4 +1,3 @@
-
 # TZ Portfolio Tracker – Website Enhancement Plan
 
 This implementation plan is based on expert review and user-centered suggestions. Areas are grouped by section, with each suggestion assigned a checkbox `[ ]` (incomplete) or `[x]` (complete). As improvements are implemented in code, items will be checked and progress will be tracked here!
@@ -14,7 +13,7 @@ This implementation plan is based on expert review and user-centered suggestions
 ## I. Homepage / Landing
 
 **Content**
-- [ ] Move platform value proposition to the very top.
+- [x] Move platform value proposition to the very top. _(Done: see chat and commit for headline addition 2025-06-15)_
 - [ ] Use Tanzanian-specific, clear, warm language site-wide.
 - [ ] Add actionable next-steps in each major section.
 - [ ] Use direct quotes as headline for testimonials; add faces if missing.
