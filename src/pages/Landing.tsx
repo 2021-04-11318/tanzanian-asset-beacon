@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, BookOpen, Newspaper, FileText, Wallet, ArrowRight, BarChart3, Shield, Users, LogIn, Star, Mail, Instagram, MessageCircle } from 'lucide-react';
@@ -16,46 +17,46 @@ const Landing = () => {
     {
       icon: <BarChart3 size={48} className="text-purple-600" />,
       title: "Track Your Portfolio",
-      description: "Monitor your shares, bonds, and units with real-time updates and comprehensive analytics."
+      description: "Keep a close eye on your DSE shares, T-bills, and bonds with real-time updates that help you make smart decisions for your financial future."
     },
     {
       icon: <BookOpen size={48} className="text-purple-600" />,
-      title: "Investment Education",
-      description: "Access educational content, investment guides, and expert insights to improve your investment knowledge."
+      title: "Learn & Grow",
+      description: "Build your investment knowledge with guides tailored for Tanzanians, from basics to advanced strategies that work in our markets."
     },
     {
       icon: <Newspaper size={48} className="text-purple-600" />,
-      title: "Market News",
-      description: "Stay updated with the latest market trends, news, and analysis from Tanzania's financial markets."
+      title: "Stay Informed",
+      description: "Get the latest news from DSE, economic updates, and market insights that matter to your investment journey in Tanzania."
     },
     {
       icon: <Shield size={48} className="text-purple-600" />,
-      title: "Secure & Reliable",
-      description: "Your investment data is protected with bank-level security and reliable performance."
+      title: "Safe & Trusted",
+      description: "Your financial information is protected with the highest security standards, giving you peace of mind as you build wealth."
     }
   ];
 
   const stats = [
-    { number: "1000+", label: "Active Users", context: "Trusted by investors" },
-    { number: "TZS 2B+", label: "Assets Tracked", context: "Real portfolio value" },
-    { number: "50+", label: "Listed Companies", context: "DSE & EGX coverage" },
-    { number: "99.9%", label: "Uptime", context: "Always available" }
+    { number: "1000+", label: "Tanzanian Investors", context: "Trust our platform" },
+    { number: "TZS 2B+", label: "Wealth Tracked", context: "Growing every day" },
+    { number: "50+", label: "Companies Listed", context: "Complete DSE coverage" },
+    { number: "99.9%", label: "Always Available", context: "When you need us" }
   ];
 
   const testimonials = [
     {
       name: "Amina Hassan",
-      role: "Individual Investor",
+      role: "Small Business Owner",
       company: "Dar es Salaam",
-      quote: "TZ Portfolio Tracker helped me organize my CRDB and NMB shares. The real-time updates keep me informed of my investments.",
+      quote: "This platform helped me understand my CRDB shares better. Now I feel confident about my investments and can plan for my children's future.",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=64&h=64&fit=crop&crop=face"
     },
     {
       name: "John Mwalimu",
-      role: "Business Owner",
+      role: "Teacher & Investor",
       company: "Arusha",
-      quote: "As a small business owner, this platform helps me track my bond investments and plan for the future. Simple and reliable.",
+      quote: "As a teacher, I needed something simple to track my government bonds. This tool makes it easy to see how my savings are growing for retirement.",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face"
     },
@@ -63,7 +64,7 @@ const Landing = () => {
       name: "Grace Makena",
       role: "Financial Advisor",
       company: "Mwanza",
-      quote: "I recommend TZ Portfolio Tracker to my clients. The educational content and portfolio insights are invaluable for new investors.",
+      quote: "I recommend this to all my clients who want to take control of their financial future. It's made investing accessible for everyday Tanzanians.",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face"
     }
@@ -75,8 +76,8 @@ const Landing = () => {
     
     // Here you would integrate with your email service
     toast({
-      title: "Thanks for subscribing!",
-      description: "You'll receive weekly market updates and investment insights.",
+      title: "Asante sana! Thanks for joining us!",
+      description: "You'll receive weekly market updates and investment tips in Swahili and English.",
     });
     setEmail('');
   };
@@ -87,10 +88,10 @@ const Landing = () => {
       {!user && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-purple-600 to-pink-500 text-white py-2 px-4 text-center">
           <div className="flex items-center justify-center space-x-4">
-            <span className="text-sm font-medium">Start tracking your investments today!</span>
+            <span className="text-sm font-medium">Anza safari yako ya uwekezaji leo! Start your investment journey today!</span>
             <Link to="/auth">
               <button className="bg-white text-purple-600 px-4 py-1 rounded-full text-sm font-medium hover:bg-gray-100 transition-colors">
-                Get Started Free
+                Jiunge Bure | Join Free
               </button>
             </Link>
           </div>
@@ -137,11 +138,12 @@ const Landing = () => {
       {/* Hero Section */}
       <HeroSectionDemo />
 
-      {/* Stats Section with Context */}
-      <section className="py-20 px-4 bg-white/50 backdrop-blur-sm">
+      {/* Stats Section with Context - Increased padding */}
+      <section className="py-24 px-4 bg-white/50 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Trusted by Tanzanian Investors</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tunaaminika na Wawekezi wa Kitanzania</h2>
+            <p className="text-lg text-gray-600">Trusted by Tanzanian Investors Nationwide</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -157,15 +159,15 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 px-4">
+      {/* Features Section - Increased padding */}
+      <section className="py-28 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need to <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">Succeed</span>
+          <div className="text-center mb-20">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Kila Kitu Unachohitaji Kufanikiwa <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">Everything You Need to Succeed</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive tools and insights for modern investors in Tanzania's growing financial markets.
+              Comprehensive tools designed specifically for Tanzanian investors to grow their wealth with confidence.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -182,14 +184,14 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-purple-50 to-pink-50">
+      {/* Testimonials Section - Increased padding */}
+      <section className="py-28 px-4 bg-gradient-to-r from-purple-50 to-pink-50">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              What Our <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">Users Say</span>
+          <div className="text-center mb-20">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Wanavyosema Wawekezi Wenzetu <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">What Our Fellow Investors Say</span>
             </h2>
-            <p className="text-xl text-gray-600">Real feedback from Tanzanian investors</p>
+            <p className="text-xl text-gray-600">Real stories from Tanzanians building their financial future</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
@@ -217,52 +219,53 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Demo Section */}
-      <section id="demo" className="py-20 px-4">
+      {/* Demo Section - Increased padding */}
+      <section id="demo" className="py-28 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              See TZ Portfolio Tracker in <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">Action</span>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Ona Jinsi TZ Portfolio Tracker Inavyofanya Kazi <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">See How It Works</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experience the power of our platform with this interactive demo featuring real portfolio data and live updates.
+              Take a guided tour of our platform and discover how easy it is to manage your investments like a pro.
             </p>
           </div>
           
           <InteractiveDemo />
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
             <Link to="/auth">
               <button className="elegant-button-primary flex items-center text-lg px-8 py-4 hover:scale-105 transition-transform">
                 <Wallet size={20} className="mr-2" />
-                Start Free Trial
+                Anza Bure | Start Free
                 <ArrowRight size={16} className="ml-2" />
               </button>
             </Link>
             <Link to="/learning">
               <button className="elegant-button-secondary flex items-center text-lg px-8 py-4">
                 <BookOpen size={20} className="mr-2" />
-                Explore Features
+                Jifunze Zaidi | Learn More
               </button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-purple-50 to-pink-50">
+      {/* CTA Section - Increased padding */}
+      <section className="py-28 px-4 bg-gradient-to-r from-purple-50 to-pink-50">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="elegant-card p-12 border-2 border-purple-100">
-            <div className="mb-6 flex justify-center">
+          <div className="elegant-card p-16 border-2 border-purple-100">
+            <div className="mb-8 flex justify-center">
               <div className="p-4 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full animate-pulse">
                 <Users size={48} className="text-white" />
               </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
-              Join Thousands of Smart Investors
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">
+              Jiunge na Familia ya Wawekezi Werevu
             </h2>
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Start your investment journey today with Tanzania's most trusted portfolio tracking platform.
+            <p className="text-lg text-gray-600 mb-4 font-medium">Join Our Community of Smart Investors</p>
+            <p className="text-xl text-gray-600 mb-10 leading-relaxed">
+              Start building your wealth today with Tanzania's most trusted and user-friendly investment platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {user ? (
@@ -270,14 +273,14 @@ const Landing = () => {
                   <Link to="/portfolio">
                     <button className="elegant-button-primary flex items-center text-lg px-8 py-4 hover:scale-105 transition-transform">
                       <Wallet size={20} className="mr-2" />
-                      Access Portfolio
+                      Fungua Portfolio | Access Portfolio
                       <ArrowRight size={16} className="ml-2" />
                     </button>
                   </Link>
                   <Link to="/learning">
                     <button className="elegant-button-secondary flex items-center text-lg px-8 py-4">
                       <BookOpen size={20} className="mr-2" />
-                      Start Learning
+                      Anza Kujifunza | Start Learning
                     </button>
                   </Link>
                 </>
@@ -286,14 +289,14 @@ const Landing = () => {
                   <Link to="/auth">
                     <button className="elegant-button-primary flex items-center text-lg px-8 py-4 hover:scale-105 transition-transform animate-pulse">
                       <LogIn size={20} className="mr-2" />
-                      Get Started Free
+                      Jiunge Bure | Get Started Free
                       <ArrowRight size={16} className="ml-2" />
                     </button>
                   </Link>
                   <Link to="/learning">
                     <button className="elegant-button-secondary flex items-center text-lg px-8 py-4">
                       <BookOpen size={20} className="mr-2" />
-                      Learn More
+                      Jifunze Zaidi | Learn More
                     </button>
                   </Link>
                 </>
@@ -303,19 +306,19 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-16 px-4 bg-white border-t border-gray-200">
+      {/* Newsletter Section - Increased padding */}
+      <section className="py-20 px-4 bg-white border-t border-gray-200">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="elegant-card p-8 border-2 border-purple-100">
-            <Mail size={48} className="text-purple-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Stay Updated</h3>
-            <p className="text-gray-600 mb-6">Get weekly market insights and investment tips delivered to your inbox</p>
+          <div className="elegant-card p-10 border-2 border-purple-100">
+            <Mail size={48} className="text-purple-600 mx-auto mb-6" />
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Baki Umejulikana | Stay Updated</h3>
+            <p className="text-gray-600 mb-8">Get weekly market insights and investment tips delivered in both Swahili and English</p>
             <form onSubmit={handleNewsletterSignup} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Weka barua pepe yako | Enter your email"
                 className="elegant-input flex-1"
                 required
               />
@@ -324,17 +327,17 @@ const Landing = () => {
                 className="elegant-button-primary flex items-center justify-center px-6"
               >
                 <Mail size={16} className="mr-2" />
-                Subscribe
+                Jiunge | Subscribe
               </button>
             </form>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-16 px-4 bg-gray-50 border-t border-gray-200">
+      {/* Footer - Increased padding */}
+      <footer className="py-20 px-4 bg-gray-50 border-t border-gray-200">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
+          <div className="grid md:grid-cols-4 gap-8 mb-16">
             <div>
               <div className="flex items-center space-x-3 mb-6">
                 <div className="p-2 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg">
@@ -343,7 +346,10 @@ const Landing = () => {
                 <span className="font-bold text-lg text-gray-900">TZ Portfolio</span>
               </div>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Empowering Tanzanian investors with world-class portfolio management tools and insights.
+                Tunawasaidia Watanzania kuongoza mazingira yao ya kifedha kwa kutumia zana za kisasa na maarifa ya kina.
+              </p>
+              <p className="text-gray-600 leading-relaxed mb-4 text-sm">
+                Empowering Tanzanians with world-class portfolio management tools and insights.
               </p>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-purple-600 transition-colors">
@@ -386,7 +392,7 @@ const Landing = () => {
             </div>
           </div>
           <div className="text-center pt-8 border-t border-gray-200">
-            <p className="text-gray-500">&copy; {new Date().getFullYear()} TZ Portfolio Tracker. Crafted with excellence for Tanzanian investors.</p>
+            <p className="text-gray-500">&copy; {new Date().getFullYear()} TZ Portfolio Tracker. Tengenezwa kwa upendo kwa ajili ya Wawekezi wa Kitanzania. Crafted with love for Tanzanian investors.</p>
           </div>
         </div>
       </footer>

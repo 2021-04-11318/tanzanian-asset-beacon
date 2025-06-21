@@ -16,12 +16,12 @@ This implementation plan is based on expert review and user-centered suggestions
 
 **Content**
 - [~] Move platform value proposition to the very top. _(Skipped: doesn't look good visually)_
-- [ ] Use Tanzanian-specific, clear, warm language site-wide.
+- [x] Use Tanzanian-specific, clear, warm language site-wide.
 - [ ] Add actionable next-steps in each major section.
 - [ ] Use direct quotes as headline for testimonials; add faces if missing.
 
 **Visuals**
-- [ ] Add more vertical padding between major sections.
+- [x] Add more vertical padding between major sections.
 - [ ] Add subtle Tanzanian motifs in backgrounds.
 - [ ] Animate stats counters, add icons and Tanzanian flags/logos.
 
