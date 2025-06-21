@@ -1,3 +1,4 @@
+
 # TZ Portfolio Tracker – Website Enhancement Plan
 
 This implementation plan is based on expert review and user-centered suggestions. Areas are grouped by section, with each suggestion assigned a checkbox `[ ]` (incomplete) or `[x]` (complete). As improvements are implemented in code, items will be checked and progress will be tracked here!
@@ -7,13 +8,14 @@ This implementation plan is based on expert review and user-centered suggestions
 ## Legend
 - [ ] = To Do
 - [x] = Completed
+- [~] = Skipped
 
 ---
 
 ## I. Homepage / Landing
 
 **Content**
-- [x] Move platform value proposition to the very top. _(Done: see chat and commit for headline addition 2025-06-15)_
+- [~] Move platform value proposition to the very top. _(Skipped: doesn't look good visually)_
 - [ ] Use Tanzanian-specific, clear, warm language site-wide.
 - [ ] Add actionable next-steps in each major section.
 - [ ] Use direct quotes as headline for testimonials; add faces if missing.
@@ -55,7 +57,7 @@ This implementation plan is based on expert review and user-centered suggestions
 ## IV. Demo Section
 
 **Content**
-- [ ] Add “Begin Your Journey” message above demo.
+- [ ] Add "Begin Your Journey" message above demo.
 - [ ] Friendly narration/tooltip inside demo.
 - [ ] Explain what to expect if demo is disabled.
 
@@ -69,7 +71,7 @@ This implementation plan is based on expert review and user-centered suggestions
 ## V. Learning Center
 
 **Content**
-- [ ] Add two-sentence “Why Learn?” at top.
+- [ ] Add two-sentence "Why Learn?" at top.
 - [ ] Use empathy-driven intros for modules.
 - [ ] Add visual progress bar; animation on finish.
 
@@ -84,12 +86,12 @@ This implementation plan is based on expert review and user-centered suggestions
 
 **Content**
 - [ ] Add emotional, user-centric language.
-- [ ] Badges for “as seen by XX users”/“most popular report”.
-- [ ] Article tags (e.g. “Beginner-friendly”,”Expert opinion“).
+- [ ] Badges for "as seen by XX users"/"most popular report".
+- [ ] Article tags (e.g. "Beginner-friendly","Expert opinion").
 
 **Visuals**
 - [ ] Add thumbnails to each article/report.
-- [ ] Card hover with “lift” effect.
+- [ ] Card hover with "lift" effect.
 - [ ] More iconography in list views.
 
 ---

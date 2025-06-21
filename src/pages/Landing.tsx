@@ -83,16 +83,6 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      {/* === Value Proposition section (NEW, always at the very top) === */}
-      <div className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 px-4 flex flex-col items-center justify-center shadow-sm border-b border-purple-200 z-50">
-        <h1 className="text-2xl md:text-3xl font-bold text-center mb-2 font-playfair">
-          Empowering Tanzanians to grow, manage, and learn about their investments—all in one place.
-        </h1>
-        <p className="text-base md:text-lg opacity-90 text-center max-w-2xl mx-auto font-medium">
-          TZ Portfolio Tracker is your trusted companion for DSE shares, government bonds, and financial success throughout Tanzania.
-        </p>
-      </div>
-      
       {/* Sticky CTA Header */}
       {!user && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-purple-600 to-pink-500 text-white py-2 px-4 text-center">
